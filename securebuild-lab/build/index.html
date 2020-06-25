@@ -339,6 +339,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#troubleshooting-secure-build" class="md-nav__link">
+    Troubleshooting Secure Build
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#verify-your-application" class="md-nav__link">
     Verify your application
   </a>
@@ -497,6 +504,13 @@
         <li class="md-nav__item">
   <a href="#build-application" class="md-nav__link">
     Build Application
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-secure-build" class="md-nav__link">
+    Troubleshooting Secure Build
   </a>
   
 </li>
@@ -677,7 +691,7 @@ gpg: <span class="k">done</span>
 </li>
 <li>
 <p>Create config file</p>
-<div class="highlight"><pre><span></span><code>cat &gt; &quot;${SB_DIR}/sb_config.yaml&quot; &lt;&lt;EOF
+<p><div class="highlight"><pre><span></span><code>cat &gt; &quot;${SB_DIR}/sb_config.yaml&quot; &lt;&lt;EOF
 secure_build_workers:
     sbs:
         url: &#39;https://${SB_IP}&#39;
@@ -709,32 +723,43 @@ secure_build_workers:
         public_key_path: &#39;${SB_DIR}/registration_keys/${keyName}.pub&#39;
 EOF
 </code></pre></div>
-
+8. Continue to the <a href="#build-application">Build Application section</a> if you are launching secure build for the first time or the <a href="#troubleshooting-secure-build">Troubleshooting Secure Build section</a> if things didn't go as planned your first go-round and you are trying to get back on the right track.</p>
 </li>
 </ol>
 <h2 id="build-application">Build Application<a class="headerlink" href="#build-application" title="Permanent link">&para;</a></h2>
 <ol>
 <li>
-<p>Launch secure build with a timeout of 20 minutes (1200 seconds) to complete using the above generated configuration file.</p>
-<div class="highlight"><pre><span></span><code><span class="nb">echo</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">passphrase</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">|</span> hpvs sb init <span class="se">\</span>
+<p>Initialize Secure Build Hyper Protect Virtual server with configuration file generated in the <a href="#set-build-configuration">Set Build Configuration section</a></p>
+<div class="highlight"><pre><span></span><code>hpvs sb init --config <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/sb_config.yaml&quot;</span>
+</code></pre></div>
+
+<div class="admonition example">
+<p class="admonition-title">Example Output</p>
+<div class="highlight"><pre><span></span><code><span class="o">{</span><span class="s2">&quot;status&quot;</span>:<span class="s2">&quot;OK&quot;</span><span class="o">}</span>
+</code></pre></div>
+
+</div>
+</li>
+<li>
+<p>Launch secure build with a timeout of 20 minutes (1200 seconds) to complete using the configuration file generated in the <a href="#set-build-configuration">Set Build Configuration section</a></p>
+<div class="highlight"><pre><span></span><code>hpvs sb build <span class="se">\</span>
 --config <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/sb_config.yaml&quot;</span> <span class="se">\</span>
---out <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/yaml.</span><span class="si">${</span><span class="nv">REPO_ID</span><span class="si">}</span><span class="s2">.enc&quot;</span> --timeout <span class="m">1200</span> --build
+--timeout <span class="m">1200</span>
 </code></pre></div>
 
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>The following build will take anywhere from <strong>15-20 minutes</strong> to complete. While this is ongoing, you should open a new tab in your terminal to check the automatically updating logs and build status (steps for doing this are detailed in the next few steps).</p>
+<p>The following build will take anywhere from <strong>15-20 minutes</strong> to complete. While this is ongoing, you should open a new tab in your terminal to check the automatically updating logs and build status (steps for doing this are detailed in the next few steps). If this command times out please check the status in the `step 3 to make sure nothing went wrong. If something did go wrong visit the <a href="#troubleshooting-secure-build">Troubleshooting Secure Build section</a></p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The secure build is asynchronous so if the command gets interrupted here don't worry! <img alt="😁" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f601.svg" title=":grin:" /></p>
-<p>That just means you will need to retrieve the registration file later since the cli couldn't grab it after the build. </p>
-<p>(We will do this anyway in <code>Step 7</code> to cover our bases)</p>
 </div>
-<details class="example" open="open"><summary>Example Output after running 15-20 minutes to completion</summary><div class="highlight"><pre><span></span><code>Enter Sigining Private key passphrase: 
-<span class="o">{</span><span class="s2">&quot;status&quot;</span>:<span class="s2">&quot;OK&quot;</span><span class="o">}</span>
-
-+--------+-------------------------+
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If the secure build command gets an error this command will keep on waiting until eventually timing out. If you see an error in the <code>status</code> you can interrupt this command with <code>ctrl+c</code> instead of waiting for it to time out. </p>
+</div>
+<details class="example" open="open"><summary>Example Output after running 15-20 minutes to completion</summary><div class="highlight"><pre><span></span><code>+--------+-------------------------+
 <span class="p">|</span> status <span class="p">|</span> OK: async build started <span class="p">|</span>
 +--------+-------------------------+
 <span class="c1">##############################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################</span>
@@ -786,6 +811,10 @@ github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXY
 </code></pre></div>
 
 </details>
+<div class="admonition error">
+<p class="admonition-title">If you see an error in your status</p>
+<p>If you see that your build ran into an error please visit the <a href="#troubleshooting-secure-build">Troubleshooting Secure Build section</a></p>
+</div>
 </li>
 <li>
 <p>You can continue to check the logs to monitor the progress of your secure build with the previous logs command</p>
@@ -834,32 +863,57 @@ github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXY
 </code></pre></div>
 
 </details>
+<div class="admonition error">
+<p class="admonition-title">If you see an error in your status</p>
+<p>If you see that your build ran into an error please visit the <a href="#troubleshooting-secure-build">Troubleshooting Secure Build section</a></p>
+</div>
 </li>
 <li>
-<p>From the original terminal window that you ran <code>hpvs sb init</code>, output the repository registration file (just in case the <code>sb init</code> command got interrupted before completing)</p>
+<p>From the original terminal window that you ran <code>hpvs sb init</code>, output the repository registration file.</p>
 <div class="highlight"><pre><span></span><code><span class="nb">echo</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">passphrase</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">|</span> hpvs sb regfile <span class="se">\</span>
 --config <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/sb_config.yaml&quot;</span> <span class="se">\</span>
 --out <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/yaml.</span><span class="si">${</span><span class="nv">REPO_ID</span><span class="si">}</span><span class="s2">.enc&quot;</span>
 </code></pre></div>
 
-<details class="example" open="open"><summary>Example Output</summary></details>
-<div class="highlight"><pre><span></span><code>Enter Sigining Private key passphrase:
+<details class="example" open="open"><summary>Example Output</summary><div class="highlight"><pre><span></span><code>Enter Sigining Private key passphrase:
 </code></pre></div>
 
+</details>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>The <code>echo</code> command takes care of the passphrase so you don't need to enter it manually.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>If you run this command from a terminal window where you did not set the <code>$passphrase</code> environment variable you will get an error saying <code>openpgp: invalid data: private key checksum failure</code>. You can also check to make sure you are in the right terminal window by running <code>echo $passphrase</code> and the output should be the passphrase you set in the beginning of the "Create repository registration GPG signing key" section.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This registration file should be created at the end of the <code>sb init</code> command. However, given that the build is asynchronous it will complete even if you accidentally interrupt it. However, if you do interrupt it then the repository registration file won't be created. We grab it again here just to cover our bases if that command got interrupted. If it didn't get interrupted you could skip this step. However, it doesn't hurt to grab it again here as it will just retrieve it again. </p>
+<p>If you run this command from a terminal window where you did not set the <code>passphrase</code> environment variable you will get an error saying <code>openpgp: invalid data: private key checksum failure</code>. You can also check to make sure you are in the right terminal window by running <code>echo "${passphrase}"</code> and the output should be the passphrase you set in the beginning of the "Create repository registration GPG signing key" section. </p>
 </div>
 </li>
 </ol>
+<h2 id="troubleshooting-secure-build">Troubleshooting Secure Build<a class="headerlink" href="#troubleshooting-secure-build" title="Permanent link">&para;</a></h2>
+<details><summary>Troubleshooting Instructions [Open by clicking on arrow on right]</summary><p>If your build completed successfully no need to use this section <img alt="😄" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f604.svg" title=":smile:" /></p>
+<div class="admonition error">
+<p class="admonition-title">If your build failed continue for instructions on how to find the happy path yet again.</p>
+<p>If at any point you see an error in the status command you will need to restart your build with the following steps.</p>
+<ol>
+<li>If the secure build command is still running in its own window please interrupt it with <code>ctrl + c</code></li>
+<li>Check the logs for more error information using:
+    <div class="highlight"><pre><span></span><code>hpvs sb log --config <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/sb_config.yaml&quot;</span>
+</code></pre></div></li>
+<li>Correct whatever information was incorrect and go back through the steps in the <a href="#set-build-configuration">Set Build Configuration section</a></li>
+<li>Clean up the data (i.e. logs) from the old build with:
+    <div class="highlight"><pre><span></span><code>hpvs sb clean --config <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/sb_config.yaml&quot;</span>
+</code></pre></div></li>
+<li>Update the secure build server with the new configuration
+    <div class="highlight"><pre><span></span><code>hpvs sb update --config <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/sb_config.yaml&quot;</span>
+</code></pre></div></li>
+<li>Continue onward like you just initialized your build server (You did ... just for another time <img alt="😁" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f601.svg" title=":grin:" />) at <code>Step 2</code> in the <a href="#build-application">Build Application Section</a></li>
+</ol>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The next command you should run will be <code>hpvs sb build</code> (<code>Step 2</code> in the <a href="#build-application">Build Application Section</a>)</p>
+</div>
+</div>
+</details>
 <h2 id="verify-your-application">Verify your application<a class="headerlink" href="#verify-your-application" title="Permanent link">&para;</a></h2>
 <ol>
 <li>
