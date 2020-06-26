@@ -563,7 +563,7 @@ writing new private key to <span class="s1">&#39;/home/multiarch-lab/securebuild
 <li>
 <p>Change cert to base64 encoding and save to new file.</p>
 <div class="highlight"><pre><span></span><code><span class="nb">echo</span> <span class="k">$(</span>cat <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/sbs_keys/sbs.cert&quot;</span> <span class="p">|</span> base64<span class="k">)</span> <span class="se">\</span>
-<span class="p">|</span> tr -d <span class="s1">&#39; &#39;</span> &gt;&gt; <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/sbs_keys/sbs_base64.cert&quot;</span>
+<span class="p">|</span> tr -d <span class="s1">&#39; &#39;</span> &gt; <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/sbs_keys/sbs_base64.cert&quot;</span>
 </code></pre></div>
 
 </li>
@@ -572,6 +572,14 @@ writing new private key to <span class="s1">&#39;/home/multiarch-lab/securebuild
 <div class="highlight"><pre><span></span><code><span class="nb">export</span> <span class="nv">cert</span><span class="o">=</span><span class="k">$(</span>cat <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/sbs_keys/sbs_base64.cert&quot;</span><span class="k">)</span>
 </code></pre></div>
 
+</li>
+<li>
+<p>Check your cert with:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">echo</span> <span class="nv">$cert</span>
+</code></pre></div>
+
+<details class="success" open="open"><summary>It should be long and have no spaces</summary><p><code>LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURUVENDQWpXZ0F3SUJBZ0lVUERITlQ3Y3YrZWNzZ1Y0QnZHSmhhaVAyOERnd0RRWUpLb1pJaHZjTkFRRUwKQlFBd05qRUxNQWtHQTFVRUJoTUNWVk14RERBS0JnTlZCQW9NQTBsQ1RURVpNQmNHQTFVRUF3d1FhSEIyY3k1bAplR0Z0Y0d4bExtTnZiVEFlRncweU1EQTJNall3TXpVM016RmFGdzB6TURBMk1qUXdNelUzTXpGYU1EWXhDekFKCkJnTlZCQVlUQWxWVE1Rd3dDZ1lEVlFRS0RBTkpRazB4R1RBWEJnTlZCQU1NRUdod2RuTXVaWGhoYlhCc1pTNWoKYjIwd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUURWbTBveGI5N3pnYTc2REtwWAptSC9XaWh0OGJCOUZMMEY0U3dxRjdhQ3I4RkZBUHhIYnFieVQvTVhZcVYwdGlWU1JNSHhDd2hhR1FlSXJhWDlKCjRVZ2FCaUEwQ2krWVFZWmF1SXcvVmI4SEtUYkxERC9SblMwai9SSFk1Tzl1TXJ3NXNpQzBydElTRXBwa1VFdFEKWGZTdGFDMU82bmlLUXY1NDZkRGdRRmVGbUI5WHZVeHdzK2pES1g4aW1XaWhIeERLYVN1cEkwRk9JQ094dVhVWQpZSTVPeWVrbDVNaGttMitVTjhFekowY3JtSGJTQnh2Rlg2amh4UkhWNTd6VjR2Tm5VTGQwL1ZCNTBxZ2ZtcmVPCk5PMUJOMGtOMk1vV1N1R3lRdDZNS0NvSHAyUzgxTmJMcXRERndjMkxtbGxkc21hVEFqTVdkTjFyNjlXdVlkTmUKYjlJaEFnTUJBQUdqVXpCUk1CMEdBMVVkRGdRV0JCVFMrNEJKTUhZbG9RS2kvZjVlR2N1MDg3U3Q4VEFmQmdOVgpIU01FR0RBV2dCVFMrNEJKTUhZbG9RS2kvZjVlR2N1MDg3U3Q4VEFQQmdOVkhSTUJBZjhFQlRBREFRSC9NQTBHCkNTcUdTSWIzRFFFQkN3VUFBNElCQVFDQk9KdjVkbllLSUpmdXQ3VlVyWS9FYThzby9oaDhTdTQwK0NoRTYreVcKazFPSkV6NnorU3FrTFlwZ0hqV1JQL1VVY3ZzdCtnZVVNR2dZeThCZ01HaGFRVUdESm9NYzdvcDcyN2w1akdMcApjWGE3cDU0aWtqYnN3QzllL000a0tKRVVRWTEyUU42TDQrVDZBRUtZcnRUVnZCMURGLzhndW9ZNjFLbDEzOVNFCmVockllWGE4THVGTmY3STc1bHpJZHpTSHpieXp0empUeW9IYTN1cmloNUNnMkhISkpsTXlNaVIwQUVKMURMQmMKMmo0SFp2V0hrYWZaTEtuRnBKUHJNa01DSXpwdFQ1SnlHOW5pUlh3RmkxdzR6UDlJRHBCRVh1UGNuU1ZacFJFawpRSHNrSzY1Nm1xRndvY2pBMXNSMmZjS1pUbkJjMlhmM0NUelVxSVoyYStSVQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==</code></p>
+</details>
 </li>
 </ol>
 <h2 id="set-your-provided-number-and-save-it-for-later-use">Set your provided number and save it for later use<a class="headerlink" href="#set-your-provided-number-and-save-it-for-later-use" title="Permanent link">&para;</a></h2>

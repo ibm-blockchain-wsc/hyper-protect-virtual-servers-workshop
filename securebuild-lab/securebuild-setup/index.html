@@ -552,15 +552,19 @@
 </div>
 </li>
 <li>
-<p>Check your login credentials with a <code>docker login</code></p>
+<p>Check your <a href="https://hub.docker.com/" target="_blank">Docker Hub</a> login credentials with a <code>docker login</code></p>
 <div class="highlight"><pre><span></span><code><span class="nb">echo</span> <span class="s2">&quot;</span><span class="si">${</span><span class="nv">DOCKER_PASSWORD</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">|</span> docker login -u <span class="si">${</span><span class="nv">DOCKER_USERNAME</span><span class="si">}</span> --password-stdin
 </code></pre></div>
 
-<details class="example" open="open"><summary>Example Output</summary><div class="highlight"><pre><span></span><code>WARNING! Your password will be stored unencrypted in /home/multiarch-lab/.docker/config.json.
+<details class="success" open="open"><summary>Successful login</summary><div class="highlight"><pre><span></span><code>WARNING! Your password will be stored unencrypted in /home/multiarch-lab/.docker/config.json.
 Configure a credential helper to remove this warning. See
 https://docs.docker.com/engine/reference/commandline/login/#credentials-store
 
 Login Succeeded
+</code></pre></div>
+
+</details>
+<details class="failure" open="open"><summary>Failed Login <img alt="😞" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f61e.svg" title=":disappointed:" /> Please redo <a href="#add-docker-registry-to-use-for-secure-build">this section</a></summary><div class="highlight"><pre><span></span><code>Error response from daemon: Get https://registry-1.docker.io/v2/: unauthorized: incorrect username or password
 </code></pre></div>
 
 </details>
@@ -721,6 +725,40 @@ The key<span class="err">&#39;</span>s randomart image is:
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The above copy command (<code>ctrl+shift+c</code>) is saving the <code>.pub</code> public key <strong>NOT</strong> the <code>private</code> key. You keep the private key and GitHub uses the public key to verify that it is communicating with the owner of the private key (i.e. you).</p>
+</div>
+</li>
+<li>
+<p>Scan for GitHub's public key (Done to trust GitHub connection the first time)</p>
+<div class="highlight"><pre><span></span><code>ssh-keyscan -H github.com &gt;&gt; <span class="s2">&quot;</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.ssh/known_hosts&quot;</span>
+</code></pre></div>
+
+<div class="admonition example">
+<p class="admonition-title">Example Output</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># github.com:22 SSH-2.0-babeld-ffbef2ae</span>
+<span class="c1"># github.com:22 SSH-2.0-babeld-ffbef2ae</span>
+<span class="c1"># github.com:22 SSH-2.0-babeld-ffbef2ae</span>
+</code></pre></div>
+
+</div>
+</li>
+<li>
+<p>Check your GitHub key now has access to your account with:</p>
+<div class="highlight"><pre><span></span><code>ssh -T git@github.com -i <span class="s2">&quot;</span><span class="si">${</span><span class="nv">GITHUB_SSH_KEY</span><span class="si">}</span><span class="s2">&quot;</span>
+</code></pre></div>
+
+<div class="admonition success">
+<p class="admonition-title">Your key was added successfully</p>
+<div class="highlight"><pre><span></span><code>Warning: Permanently added the RSA host key <span class="k">for</span> IP address <span class="s1">&#39;140.82.114.3&#39;</span> to the list of known hosts.
+Hi siler23! You<span class="err">&#39;</span>ve successfully authenticated, but GitHub does not provide shell access.
+</code></pre></div>
+
+</div>
+<div class="admonition failure">
+<p class="admonition-title">Your key was <strong>NOT</strong> added <img alt="😞" class="twemoji" src="https://twemoji.maxcdn.com/v/latest/svg/1f61e.svg" title=":disappointed:" /> Please redo <a href="#create-ssh-key-and-grant-github-access">this section</a></p>
+<div class="highlight"><pre><span></span><code>Warning: Permanently added the RSA host key <span class="k">for</span> IP address <span class="s1">&#39;140.82.113.3&#39;</span> to the list of known hosts.
+git@github.com: Permission denied <span class="o">(</span>publickey<span class="o">)</span>.
+</code></pre></div>
+
 </div>
 </li>
 <li>

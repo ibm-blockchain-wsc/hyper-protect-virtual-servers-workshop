@@ -559,26 +559,22 @@
 <ol>
 <li>
 <p>Set key name</p>
-<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Command Syntax</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code><span class="nb">export</span> <span class="nv">keyName</span><span class="o">=</span><span class="s2">&quot;your_keyname&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span> <span class="nv">keyName</span><span class="o">=</span><span class="s2">&quot;secure_bitcoin_key</span><span class="si">${</span><span class="nv">RANDOM</span><span class="si">}</span><span class="s2">&quot;</span>
 </code></pre></div>
 
-</div>
-<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Example Command</label><div class="tabbed-content">
-<div class="highlight"><pre><span></span><code><span class="nb">export</span> <span class="nv">keyName</span><span class="o">=</span><span class="s2">&quot;secure_bitcoin_key&quot;</span>
-</code></pre></div>
-
-</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p><code>${RANDOM}</code> stores a pseudo-random number to use since GPG keys on a system must each have a unique key name (uid). This will make sure users can safely re-run commands for multiple runs if they so choose.</p>
 </div>
 </li>
 <li>
 <p>Set key passphrase</p>
-<div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Command Syntax</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Command Syntax</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="nb">export</span> <span class="nv">passphrase</span><span class="o">=</span><span class="s2">&quot;your_passphrase&quot;</span>
 </code></pre></div>
 
 </div>
-<input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><label for="__tabbed_2_2">Example Command</label><div class="tabbed-content">
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">Example Command</label><div class="tabbed-content">
 <div class="highlight"><pre><span></span><code><span class="nb">export</span> <span class="nv">passphrase</span><span class="o">=</span><span class="s2">&quot;most_secure_pw_i_could_think_of&quot;</span>
 </code></pre></div>
 
@@ -743,13 +739,13 @@ EOF
 <li>
 <p>Launch secure build with a timeout of 20 minutes (1200 seconds) to complete using the configuration file generated in the <a href="#set-build-configuration">Set Build Configuration section</a></p>
 <div class="highlight"><pre><span></span><code>hpvs sb build <span class="se">\</span>
---config <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/sb_config.yaml&quot;</span> <span class="se">\</span>
---timeout <span class="m">1200</span>
+--timeout <span class="m">1200</span> <span class="se">\</span>
+--config <span class="s2">&quot;</span><span class="si">${</span><span class="nv">SB_DIR</span><span class="si">}</span><span class="s2">/sb_config.yaml&quot;</span>
 </code></pre></div>
 
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>The following build will take anywhere from <strong>15-20 minutes</strong> to complete. While this is ongoing, you should open a new tab in your terminal to check the automatically updating logs and build status (steps for doing this are detailed in the next few steps). If this command times out please check the status in the `step 3 to make sure nothing went wrong. If something did go wrong visit the <a href="#troubleshooting-secure-build">Troubleshooting Secure Build section</a></p>
+<p>The following build will take anywhere from <strong>15-20 minutes</strong> to complete. While this is ongoing, you should open a new tab in your terminal to check the automatically updating logs and build status (steps for doing this are detailed in the next few steps). If this command times out please check the status in the <code>step 3</code> to make sure nothing went wrong. It might just be that your build took to long and everything will be ok. If something did go wrong, visit the <a href="#troubleshooting-secure-build">Troubleshooting Secure Build section</a></p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
